@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 5.2.0
+-- version 5.2.1
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: May 28, 2025 at 07:10 PM
--- Server version: 10.4.27-MariaDB
--- PHP Version: 8.2.0
+-- Waktu pembuatan: 30 Bulan Mei 2025 pada 17.25
+-- Versi server: 10.4.32-MariaDB
+-- Versi PHP: 8.2.12
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -24,7 +24,27 @@ SET time_zone = "+00:00";
 -- --------------------------------------------------------
 
 --
--- Table structure for table `detail_pesanan`
+-- Struktur dari tabel `admin`
+--
+
+CREATE TABLE `admin` (
+  `id` int(11) NOT NULL,
+  `username` varchar(50) NOT NULL,
+  `password` varchar(255) NOT NULL,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data untuk tabel `admin`
+--
+
+INSERT INTO `admin` (`id`, `username`, `password`, `created_at`) VALUES
+(1, 'admin1', '$2y$10$xO67vndvELgv0Hom90wRDuBEnWUH5DQk/h7jGsKRHjWQxvktkcIJW', '2025-05-30 14:21:25');
+
+-- --------------------------------------------------------
+
+--
+-- Struktur dari tabel `detail_pesanan`
 --
 
 CREATE TABLE `detail_pesanan` (
@@ -36,17 +56,19 @@ CREATE TABLE `detail_pesanan` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Dumping data for table `detail_pesanan`
+-- Dumping data untuk tabel `detail_pesanan`
 --
 
 INSERT INTO `detail_pesanan` (`id_detail`, `id_pesanan`, `id_produk`, `jumlah`, `harga`) VALUES
 (10, 15, 4, 3, 45000),
-(11, 15, 6, 1, 21000);
+(11, 15, 6, 1, 21000),
+(12, 16, 4, 2, 45000),
+(13, 16, 12, 3, 19000);
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `keranjang`
+-- Struktur dari tabel `keranjang`
 --
 
 CREATE TABLE `keranjang` (
@@ -59,17 +81,93 @@ CREATE TABLE `keranjang` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Dumping data for table `keranjang`
+-- Dumping data untuk tabel `keranjang`
 --
 
 INSERT INTO `keranjang` (`id_keranjang`, `id_users`, `id_produk`, `jumlah`, `total_harga`, `selected`) VALUES
 (7, 5, 4, 3, 135000, 0),
-(8, 5, 6, 1, 21000, 0);
+(8, 5, 6, 1, 21000, 0),
+(54, 1, 1, 2, 0, 0);
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `pesanan`
+-- Struktur dari tabel `orders`
+--
+
+CREATE TABLE `orders` (
+  `id_order` int(11) NOT NULL,
+  `id_users` int(11) NOT NULL,
+  `total_harga` int(11) NOT NULL,
+  `metode_pembayaran` varchar(50) NOT NULL,
+  `alamat` text NOT NULL,
+  `tanggal_pesanan` datetime NOT NULL,
+  `status` varchar(50) DEFAULT 'Menunggu Konfirmasi'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data untuk tabel `orders`
+--
+
+INSERT INTO `orders` (`id_order`, `id_users`, `total_harga`, `metode_pembayaran`, `alamat`, `tanggal_pesanan`, `status`) VALUES
+(1, 8, 66000, 'COD', 'Jalan Raden Patah 39', '2025-05-30 13:21:57', 'Menunggu Pengiriman'),
+(2, 8, 90000, 'COD', 'Jalan Raden Patah 39', '2025-05-30 13:31:15', 'Menunggu Pengiriman'),
+(3, 8, 90000, 'COD', 'Jalan Raden Patah 39', '2025-05-30 13:32:15', 'Menunggu Pengiriman'),
+(4, 8, 90000, 'COD', 'Jalan Raden Patah 39', '2025-05-30 14:41:53', 'Menunggu Pengiriman'),
+(5, 9, 75000, 'Transfer', 'asa', '2025-05-30 14:46:35', 'Menunggu Pengiriman'),
+(6, 9, 42000, 'COD', 'asa', '2025-05-30 14:47:11', 'Menunggu Pengiriman'),
+(7, 9, 68000, 'Transfer', 'asa', '2025-05-30 14:47:25', 'Menunggu Konfirmasi'),
+(8, 8, 38000, 'COD', 'Jalan Raden Patah 39', '2025-05-30 14:50:06', 'Menunggu Pengiriman'),
+(9, 8, 68000, 'Transfer', 'Jalan Raden Patah 39', '2025-05-30 14:50:24', 'Menunggu Pengiriman'),
+(10, 8, 42000, 'Transfer', 'Jalan Raden Patah 39', '2025-05-30 14:51:01', 'Menunggu Konfirmasi'),
+(11, 8, 76000, 'COD', 'Jalan Raden Patah 39', '2025-05-30 14:52:39', 'Menunggu Pengiriman'),
+(12, 8, 90000, 'COD', 'Jalan Raden Patah 39', '2025-05-30 14:53:33', 'Menunggu Pengiriman'),
+(13, 9, 211000, 'QRIS', 'raden patah 39', '2025-05-30 22:03:15', 'Menunggu Konfirmasi'),
+(14, 9, 68000, 'QRIS', 'raden patah 39', '2025-05-30 22:23:11', 'Menunggu Pengiriman');
+
+-- --------------------------------------------------------
+
+--
+-- Struktur dari tabel `order_details`
+--
+
+CREATE TABLE `order_details` (
+  `id_detail` int(11) NOT NULL,
+  `id_order` int(11) NOT NULL,
+  `id_produk` int(11) NOT NULL,
+  `nama_produk` varchar(255) NOT NULL,
+  `harga` int(11) NOT NULL,
+  `jumlah` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data untuk tabel `order_details`
+--
+
+INSERT INTO `order_details` (`id_detail`, `id_order`, `id_produk`, `nama_produk`, `harga`, `jumlah`) VALUES
+(1, 3, 4, 'Buku Sidu', 45000, 2),
+(2, 4, 4, 'Buku Sidu', 45000, 2),
+(3, 5, 3, 'Minyak Bimoli', 33000, 1),
+(4, 5, 34, 'Tissue Nice', 42000, 1),
+(5, 6, 8, 'Aqua Galon', 21000, 2),
+(6, 7, 2, 'Betadine', 34000, 2),
+(7, 8, 12, 'Gula Gulaku', 19000, 1),
+(8, 8, 9, 'Gas Elpiji', 19000, 1),
+(9, 9, 2, 'Betadine', 34000, 2),
+(10, 10, 8, 'Aqua Galon', 21000, 2),
+(11, 11, 1, 'Beras Sania', 76000, 1),
+(12, 12, 4, 'Buku Sidu', 45000, 2),
+(13, 13, 8, 'Aqua Galon', 21000, 1),
+(14, 13, 12, 'Gula Gulaku', 19000, 2),
+(15, 13, 9, 'Gas Elpiji', 19000, 4),
+(16, 13, 23, 'LA ICE', 34000, 1),
+(17, 13, 34, 'Tissue Nice', 42000, 1),
+(18, 14, 2, 'Betadine', 34000, 2);
+
+-- --------------------------------------------------------
+
+--
+-- Struktur dari tabel `pesanan`
 --
 
 CREATE TABLE `pesanan` (
@@ -82,16 +180,17 @@ CREATE TABLE `pesanan` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Dumping data for table `pesanan`
+-- Dumping data untuk tabel `pesanan`
 --
 
 INSERT INTO `pesanan` (`id_pesanan`, `id_users`, `tanggal_pesanan`, `total_harga`, `metode_pembayaran`, `alamat`) VALUES
-(15, 7, '2025-05-28 19:06:00.000000', 156000, 'COD', 'dipatiukur no 65');
+(15, 7, '2025-05-28 19:06:00.000000', 156000, 'COD', 'dipatiukur no 65'),
+(16, 8, '2025-05-29 21:07:20.000000', 147000, 'COD', 'Jalan Sukarindik 12');
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `produk`
+-- Struktur dari tabel `produk`
 --
 
 CREATE TABLE `produk` (
@@ -103,7 +202,7 @@ CREATE TABLE `produk` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Dumping data for table `produk`
+-- Dumping data untuk tabel `produk`
 --
 
 INSERT INTO `produk` (`id_produk`, `nama`, `harga`, `gambar`, `deskripsi`) VALUES
@@ -145,7 +244,7 @@ INSERT INTO `produk` (`id_produk`, `nama`, `harga`, `gambar`, `deskripsi`) VALUE
 -- --------------------------------------------------------
 
 --
--- Table structure for table `users`
+-- Struktur dari tabel `users`
 --
 
 CREATE TABLE `users` (
@@ -153,32 +252,42 @@ CREATE TABLE `users` (
   `username` varchar(50) NOT NULL,
   `password` varchar(255) NOT NULL,
   `nama` varchar(100) NOT NULL,
-  `created_at` timestamp NOT NULL DEFAULT current_timestamp()
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  `alamat` text NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Dumping data for table `users`
+-- Dumping data untuk tabel `users`
 --
 
-INSERT INTO `users` (`id_users`, `username`, `password`, `nama`, `created_at`) VALUES
-(1, 'Pierre', '$2y$10$FxKHiKS0ASRTY6raZOQhIe0m8r3CA4OnjG2WPrsVLlKN3bzOahqeG', 'Lawrence Pierre Yosefa', '2025-04-05 08:00:58'),
-(3, 'Alvaro', '$2y$10$KDQ9zTvkBUhWJNINpB6nDuKLAmEy8E8fDKW3rl.eQZ4Mp26IW/VMi', 'Alvaro Morata', '2025-04-08 07:44:46'),
-(5, 'nando', '$2y$10$mX71saZnS0iBCLP73dFvcOrE7VfBJem3qhkvqmAHJakkYlWgh3fZW', 'Vernando', '2025-04-12 20:11:09'),
-(6, 'Chris', '$2y$10$MIHiMu5lfviUyZRJ2QLiQu9yyDqEFxwHtxrSIml3QsYj9AdH/WhJ2', 'Chriszega', '2025-05-28 14:37:18'),
-(7, 'zega', '$2y$10$ftLmqm2dxKb7cVrZcNd7/OxmZOMuxblrcNAMzWEfVc1LvIEh3M9Ie', 'zega', '2025-05-28 15:43:46');
+INSERT INTO `users` (`id_users`, `username`, `password`, `nama`, `created_at`, `alamat`) VALUES
+(1, 'Pierre', '$2y$10$FxKHiKS0ASRTY6raZOQhIe0m8r3CA4OnjG2WPrsVLlKN3bzOahqeG', 'Lawrence Pierre Yosefa', '2025-04-05 08:00:58', ''),
+(3, 'Alvaro', '$2y$10$KDQ9zTvkBUhWJNINpB6nDuKLAmEy8E8fDKW3rl.eQZ4Mp26IW/VMi', 'Alvaro Morata', '2025-04-08 07:44:46', ''),
+(5, 'nando', '$2y$10$mX71saZnS0iBCLP73dFvcOrE7VfBJem3qhkvqmAHJakkYlWgh3fZW', 'Vernando', '2025-04-12 20:11:09', ''),
+(6, 'Chris', '$2y$10$MIHiMu5lfviUyZRJ2QLiQu9yyDqEFxwHtxrSIml3QsYj9AdH/WhJ2', 'Chriszega', '2025-05-28 14:37:18', ''),
+(7, 'zega', '$2y$10$ftLmqm2dxKb7cVrZcNd7/OxmZOMuxblrcNAMzWEfVc1LvIEh3M9Ie', 'zega', '2025-05-28 15:43:46', ''),
+(8, 'Yerr', '$2y$10$2asRgxA.UXhJUW4XO2eVt.a4.UGk7uiK8RJYLb6vXP.WTD5/S7Swe', 'Pierre Yosefa', '2025-05-29 19:06:40', 'Jalan Raden Patah 39'),
+(9, 'Kustin', '$2y$10$PEuMhnLwwoK9m4mmX13lBON.G.vj2tSZMbZoOdbHgYy1ioHenSwKO', 'Justin Benedeta', '2025-05-29 22:20:34', 'raden patah 39');
 
 --
 -- Indexes for dumped tables
 --
 
 --
--- Indexes for table `detail_pesanan`
+-- Indeks untuk tabel `admin`
+--
+ALTER TABLE `admin`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `username` (`username`);
+
+--
+-- Indeks untuk tabel `detail_pesanan`
 --
 ALTER TABLE `detail_pesanan`
   ADD PRIMARY KEY (`id_detail`);
 
 --
--- Indexes for table `keranjang`
+-- Indeks untuk tabel `keranjang`
 --
 ALTER TABLE `keranjang`
   ADD PRIMARY KEY (`id_keranjang`),
@@ -186,68 +295,114 @@ ALTER TABLE `keranjang`
   ADD KEY `id_produk` (`id_produk`);
 
 --
--- Indexes for table `pesanan`
+-- Indeks untuk tabel `orders`
+--
+ALTER TABLE `orders`
+  ADD PRIMARY KEY (`id_order`),
+  ADD KEY `id_users` (`id_users`);
+
+--
+-- Indeks untuk tabel `order_details`
+--
+ALTER TABLE `order_details`
+  ADD PRIMARY KEY (`id_detail`),
+  ADD KEY `id_order` (`id_order`),
+  ADD KEY `id_produk` (`id_produk`);
+
+--
+-- Indeks untuk tabel `pesanan`
 --
 ALTER TABLE `pesanan`
   ADD PRIMARY KEY (`id_pesanan`);
 
 --
--- Indexes for table `produk`
+-- Indeks untuk tabel `produk`
 --
 ALTER TABLE `produk`
   ADD PRIMARY KEY (`id_produk`);
 
 --
--- Indexes for table `users`
+-- Indeks untuk tabel `users`
 --
 ALTER TABLE `users`
   ADD PRIMARY KEY (`id_users`),
   ADD UNIQUE KEY `username` (`username`);
 
 --
--- AUTO_INCREMENT for dumped tables
+-- AUTO_INCREMENT untuk tabel yang dibuang
 --
 
 --
--- AUTO_INCREMENT for table `detail_pesanan`
+-- AUTO_INCREMENT untuk tabel `admin`
+--
+ALTER TABLE `admin`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+
+--
+-- AUTO_INCREMENT untuk tabel `detail_pesanan`
 --
 ALTER TABLE `detail_pesanan`
-  MODIFY `id_detail` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
+  MODIFY `id_detail` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
 
 --
--- AUTO_INCREMENT for table `keranjang`
+-- AUTO_INCREMENT untuk tabel `keranjang`
 --
 ALTER TABLE `keranjang`
-  MODIFY `id_keranjang` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=44;
+  MODIFY `id_keranjang` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=72;
 
 --
--- AUTO_INCREMENT for table `pesanan`
+-- AUTO_INCREMENT untuk tabel `orders`
+--
+ALTER TABLE `orders`
+  MODIFY `id_order` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
+
+--
+-- AUTO_INCREMENT untuk tabel `order_details`
+--
+ALTER TABLE `order_details`
+  MODIFY `id_detail` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
+
+--
+-- AUTO_INCREMENT untuk tabel `pesanan`
 --
 ALTER TABLE `pesanan`
-  MODIFY `id_pesanan` int(30) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
+  MODIFY `id_pesanan` int(30) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
 
 --
--- AUTO_INCREMENT for table `produk`
+-- AUTO_INCREMENT untuk tabel `produk`
 --
 ALTER TABLE `produk`
   MODIFY `id_produk` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=35;
 
 --
--- AUTO_INCREMENT for table `users`
+-- AUTO_INCREMENT untuk tabel `users`
 --
 ALTER TABLE `users`
-  MODIFY `id_users` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY `id_users` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 
 --
--- Constraints for dumped tables
+-- Ketidakleluasaan untuk tabel pelimpahan (Dumped Tables)
 --
 
 --
--- Constraints for table `keranjang`
+-- Ketidakleluasaan untuk tabel `keranjang`
 --
 ALTER TABLE `keranjang`
   ADD CONSTRAINT `keranjang_ibfk_1` FOREIGN KEY (`id_users`) REFERENCES `users` (`id_users`),
   ADD CONSTRAINT `keranjang_ibfk_2` FOREIGN KEY (`id_produk`) REFERENCES `produk` (`id_produk`);
+
+--
+-- Ketidakleluasaan untuk tabel `orders`
+--
+ALTER TABLE `orders`
+  ADD CONSTRAINT `orders_ibfk_1` FOREIGN KEY (`id_users`) REFERENCES `users` (`id_users`);
+
+--
+-- Ketidakleluasaan untuk tabel `order_details`
+--
+ALTER TABLE `order_details`
+  ADD CONSTRAINT `order_details_ibfk_1` FOREIGN KEY (`id_order`) REFERENCES `orders` (`id_order`),
+  ADD CONSTRAINT `order_details_ibfk_2` FOREIGN KEY (`id_produk`) REFERENCES `produk` (`id_produk`);
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
